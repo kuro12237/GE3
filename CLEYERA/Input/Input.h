@@ -6,8 +6,7 @@
 class Input
 {
 public:
-	Input();
-	~Input();
+
 
 	static Input * GetInstance();
 
@@ -30,5 +29,9 @@ private:
 	BYTE preKeys[256] = {};
 	//0x80=‰Ÿ‚µ‚Ä‚¢‚éó‘Ô
 	//0x00=‰Ÿ‚µ‚Ä‚È‚¢ó‘Ô
+	Input() = default;
+	~Input() = default;
+	Input(const Input&) = delete;
+	const Input& operator=(const Input&) = delete;
 };
 

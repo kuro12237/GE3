@@ -1,13 +1,5 @@
 #include"Input.h"
 
-Input::Input()
-{
-}
-
-Input::~Input()
-{
-}
-
 Input* Input::GetInstance()
 {
 	static Input instance;

@@ -6,8 +6,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 class WinApp
 {
 public:
-	WinApp() = default;
-	~WinApp() {};
+
 	static WinApp *GetInstance();
 
 	static void Initialize();
@@ -38,14 +37,14 @@ private:
 	static const int32_t kDebugToolWindowHeight = 130;
 
 	MSG msg{};
-
-
 	WNDCLASS wc_{};
 	HWND hwnd_ = {};
-
 	HWND DebugHwnd_{};
 
-
+	WinApp() = default;
+	~WinApp() = default;
+	WinApp(const WinApp&) = delete;
+	const WinApp& operator=(const WinApp&) = delete;
 };
 
 
