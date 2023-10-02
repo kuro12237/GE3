@@ -9,17 +9,6 @@ WinApp *WinApp::GetInstance()
 
 void WinApp::Initialize()
 {
-
-
-	//MainWindow
-	//WinApp::GetInstance()->hwnd_= CreateWIND(
-	//	WinApp::GetInstance()->kWindowWidth,
-	//	WinApp::GetInstance()->kWindowHeight,
-	//	L"CLEYERA",
-	//	WinApp::GetInstance()->wc_);
-	//ShowWindow(WinApp::GetInstance()->hwnd_, SW_SHOW);
-	//
-
 	WinApp::GetInstance()->wc_.lpfnWndProc = WinApp::WindowProc;
 	WinApp::GetInstance()->wc_.lpszClassName = L"CLEYERA";
 	WinApp::GetInstance()->wc_.hInstance = GetModuleHandle(nullptr);
@@ -47,20 +36,6 @@ void WinApp::Initialize()
 
 	ShowWindow(WinApp::GetInstance()->hwnd_, SW_SHOW);
 
-#ifdef _DEBUG
-	//Debugƒc[ƒ‹
-
-	//WinApp::GetInstance()->DebugHwnd_ = CreateWIND(
-	//		WinApp::GetInstance()->kDebugToolWindowWidth,
-	//		WinApp::GetInstance()->kDebugToolWindowHeight,
-	//		L"CLEYERA",
-	//		WinApp::GetInstance()->wc_
-	//	);
-	//ShowWindow(WinApp::GetInstance()->DebugHwnd_, SW_SHOW);
-
-#endif // _DEBUG
-
-	
 
 }
 
@@ -81,12 +56,6 @@ bool WinApp::WinMsg()
 void WinApp::Finalize()
 {
 	CloseWindow(WinApp::GetInstance()->hwnd_);
-
-#ifdef _DEBUG
-	//CloseWindow(WinApp::GetInstance()->DebugHwnd_);
-#endif // _DEBUG
-
-
 }
 
 HWND WinApp::CreateWIND(const int32_t kWidth, const int32_t kHeight, LPCTSTR title, WNDCLASS wc)
