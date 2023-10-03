@@ -1,7 +1,7 @@
 #pragma once
 #include"Pch.h"
 #include"WinApp.h"
-
+#include"LogManager.h"
 
 class Input
 {
@@ -27,6 +27,9 @@ private:
 
 	BYTE keys[256] = {};
 	BYTE preKeys[256] = {};
+
+	bool isInitialize=false;
+
 	//0x80=‰Ÿ‚µ‚Ä‚¢‚éó‘Ô
 	//0x00=‰Ÿ‚µ‚Ä‚È‚¢ó‘Ô
 	Input() = default;

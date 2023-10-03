@@ -11,10 +11,12 @@ Player::~Player()
 void Player::Initialize()
 {
 	model = make_unique<Model>();
-	model->UseLight(HARF_LAMBERT);
-	model->Initialize(new ModelSphereState);
+	//model->UseLight(HARF_LAMBERT);
+	//model->Initialize(new ModelSphereState);
+	model->CreateFromObj("axis");
+
 	texHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
-	model->SetTexHandle(texHandle_);
+	//model->SetTexHandle(texHandle_);
 	model->SetColor({ 0, 0, 1, 1 });
 
 	SetCollosionAttribute(kCollisionAttributePlayer);

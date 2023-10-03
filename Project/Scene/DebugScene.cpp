@@ -15,7 +15,7 @@ void DebugScene::Initialize(GameManager* Scene)
 
 	file = FileLoader::CSVLoadFile("Resources/DebugTest.csv");
 	TestCsvFile();
-
+	
 	collisionManager = make_unique< CollisionManager>();
 
 	player_ = make_unique<Player>();
@@ -70,7 +70,7 @@ void DebugScene::TestCsvFile()
 	string line;
 	getline(file, line);
 	istringstream line_stream(line);
-	LogManager::Log(line_stream.str());
+	LogManager::Log(line_stream.str()+"\n");
 }
 
 void DebugScene::CheckAllCollision()

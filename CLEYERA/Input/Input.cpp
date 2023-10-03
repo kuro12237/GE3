@@ -9,13 +9,20 @@ Input* Input::GetInstance()
 void Input::Initialize()
 {
 	HRESULT result{};
+	if (Input::GetInstance()->isInitialize)
+	{
+		LogManager::Log("Input_Initialize_ERROR\n");
+		assert(0);
+	}
+
 	//InputDeviceの作成
-    result = DirectInput8Create(WinApp::GetInstance()->GetWc().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
+	result = DirectInput8Create(WinApp::GetInstance()->GetWc().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
 		(void**)&Input::GetInstance()->directInput, nullptr);
 
 	assert(SUCCEEDED(result));
 	//キーボードデバイスの作成
 	CreateKeybordDevice();
+	Input::GetInstance()->isInitialize = true;
 }
 
 void Input::BeginFlame()
