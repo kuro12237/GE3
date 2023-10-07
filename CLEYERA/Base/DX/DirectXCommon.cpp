@@ -101,9 +101,6 @@ D3D12_VIEWPORT DirectXCommon::viewportSetting(int32_t kClientWidth, int32_t kCli
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
-
-
-
 	return viewport;
 }
 
@@ -111,16 +108,12 @@ D3D12_RECT DirectXCommon::scissorRectSetting(int32_t kClientWidth, int32_t kClie
 {
 	//シザー矩形
 	D3D12_RECT scissorRect{};
-
 	//基本的にビューポートと同じ矩形が構成されるようにする
 	scissorRect.left = 0;
 	scissorRect.right = kClientWidth;
 	scissorRect.top = 0;
 	scissorRect.bottom = kClientHeight;
-
-
 	return scissorRect;
-
 }
 
 void DirectXCommon::ScissorViewCommand(const int32_t kClientWidth, const int32_t kClientHeight)
@@ -128,17 +121,14 @@ void DirectXCommon::ScissorViewCommand(const int32_t kClientWidth, const int32_t
 	D3D12_VIEWPORT viewport{};
 
 	viewport = viewportSetting(kClientWidth, kClientHeight);
-
 	//シザー矩形
 	D3D12_RECT scissorRect{};
 	scissorRect = scissorRectSetting(kClientWidth, kClientHeight);
 
 	//コマンドを積む
 	Commands commands = DirectXCommon::GetInstance()->commands;
-
 	commands.m_pList->RSSetViewports(1, &viewport); //
 	commands.m_pList->RSSetScissorRects(1, &scissorRect);
-
 }
 
 void DirectXCommon::EndFlame()
@@ -147,7 +137,6 @@ void DirectXCommon::EndFlame()
 	D3D12_RESOURCE_BARRIER barrier = DirectXCommon::GetInstance()->barrier;
 	ComPtr<ID3D12Fence> fence = DirectXCommon::GetInstance()->m_pFence_;
 	SwapChain swapChain = DirectXCommon::GetInstance()->swapChain;
-
 
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;

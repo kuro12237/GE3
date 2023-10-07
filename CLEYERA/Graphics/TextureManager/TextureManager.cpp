@@ -150,10 +150,10 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath)
 	//«ŠÖ”‰»
 
 	TextureManager::GetInstance()->tex[indexTex].SrvHandleCPU = GetCPUDescriptorHandle(
-		DirectXCommon::GetInstance()->GetSrvHeap().Get(), descripterSize_.SRV, indexTex
+		DirectXCommon::GetInstance()->GetSrvHeap(), descripterSize_.SRV, indexTex
 	);
 	TextureManager::GetInstance()->tex[indexTex].SrvHandleGPU = GetGPUDescriptorHandle(
-		DirectXCommon::GetInstance()->GetSrvHeap().Get(), descripterSize_.SRV, indexTex
+		DirectXCommon::GetInstance()->GetSrvHeap(), descripterSize_.SRV, indexTex
 	);
 
 	TextureManager::GetInstance()->tex[indexTex].SrvHandleCPU.ptr += DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
