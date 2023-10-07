@@ -35,8 +35,8 @@ void WinApp::Initialize()
 	);
 
 	ShowWindow(WinApp::GetInstance()->hwnd_, SW_SHOW);
-
-
+	//システムたいなーの分解能力を上げる
+	timeBeginPeriod(1);
 }
 
 bool WinApp::WinMsg()

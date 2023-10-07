@@ -9,8 +9,10 @@
 #include<numbers>
 #include<fstream>
 #include<sstream>
+#include<chrono>
 
 #include<Windows.h>
+#pragma comment(lib,"winmm.lib")
 
 #include"imgui.h"
 #include"imgui_impl_dx12.h"
@@ -23,6 +25,7 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
+
 
 #define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include <dinput.h>
@@ -43,7 +46,9 @@
 #pragma endregion
 
 using Microsoft::WRL::ComPtr;
+
 using namespace std;
+using namespace std::chrono;
 
 #include"Vector2.h"
 #include"Vector3.h"

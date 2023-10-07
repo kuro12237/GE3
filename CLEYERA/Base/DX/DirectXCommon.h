@@ -3,6 +3,7 @@
 #include"WinApp.h"
 #include"LogManager.h"
 
+
 struct D3DResourceLeakChecker{
 	~D3DResourceLeakChecker() {
 		ComPtr<IDXGIDebug1>debug;
@@ -61,6 +62,7 @@ private:
 	static D3D12_RECT scissorRectSetting(int32_t kClientWidth, int32_t kClientHeight);
 	static ComPtr<ID3D12DescriptorHeap> CreateDescripterHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 	static ComPtr<ID3D12Resource> CreateDepthStencilTextureResource();
+	
 	static void CreateFactory();
 	static void CreateDevice();
 	static void CreateCommands();
@@ -69,6 +71,9 @@ private:
 	static void CreateSwapChainResource();
 	static void CreateRTV();
 	static void CreateFence();
+
+	static void CreateFixFPS();
+	static void UpdateFixFPS();
 
 	//DXGI+ID3D12‚ÍŠî–{Comptr‚É•Ï‚¦‚é
 
@@ -87,6 +92,9 @@ private:
 	HANDLE fenceEvent = {};
 	D3D12_RESOURCE_BARRIER barrier{};
 
+	chrono::steady_clock::time_point reference_ = {};
+
+// singleton
 	DirectXCommon() = default;
 	~DirectXCommon() = default;
 	DirectXCommon(const  DirectXCommon&) = delete;
