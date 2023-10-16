@@ -8,38 +8,13 @@ DirectXCommon* DirectXCommon::GetInstance(){
 void DirectXCommon::initialize()
 {
 #ifdef _DEBUG
-	
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&DirectXCommon::GetInstance()->m_pDebugController))))
-	{
-		DirectXCommon::GetInstance()->m_pDebugController->EnableDebugLayer();
-		DirectXCommon::GetInstance()->m_pDebugController->SetEnableGPUBasedValidation(TRUE);
-	}
+	DebugController();
 #endif
 	CreateFactory();
 	CreateDevice();
-
 #ifdef _DEBUG
-	ComPtr<ID3D12InfoQueue> infoQueue = nullptr;
-
-	if (SUCCEEDED(DirectXCommon::GetInstance()->m_pDevice_->QueryInterface(IID_PPV_ARGS(&infoQueue))))
-	{
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
-		D3D12_MESSAGE_ID denyIds[] =
-		{
-			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
-		};
-		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
-		D3D12_INFO_QUEUE_FILTER filter{};
-		filter.DenyList.NumIDs = _countof(denyIds);
-		filter.DenyList.pIDList = denyIds;
-		filter.DenyList.NumSeverities = _countof(severities);
-		filter.DenyList.pSeverityList = severities;
-		infoQueue->PushStorageFilter(&filter);
-	}
+	DebugInforQueue();
 #endif _DEBUG
-
 	CreateCommands();
 	CreateSwapChain();
 	CreateDescritorHeap();
@@ -58,24 +33,13 @@ void DirectXCommon::Finalize()
 }
 
 void DirectXCommon::BeginFlame()
-{
-	UpdateFixFPS();
-
+{	
 	SwapChain swapChain = DirectXCommon::GetInstance()->swapChain;
-	Commands commands = DirectXCommon::GetInstance()->commands;
-
+	Commands commands = DirectXCommon::GetInstance()->commands;	
 	UINT backBufferIndex = swapChain.m_pSwapChain->GetCurrentBackBufferIndex();
-	D3D12_RESOURCE_BARRIER barrier{};
+	BeginFixFPS();
+	BeginBarrier(swapChain, backBufferIndex);
 
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource = swapChain.m_pResource[backBufferIndex].Get();
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-
-	commands.m_pList.Get()->ResourceBarrier(1, &barrier);
-	DirectXCommon::GetInstance()->barrier = barrier;
-	
 	//ClearScreen
 	commands.m_pList.Get()->OMSetRenderTargets(1, &DirectXCommon::GetInstance()->rtv.rtvHandles[backBufferIndex], false, nullptr);
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };
@@ -205,6 +169,38 @@ ComPtr<ID3D12Resource>DirectXCommon::CreateDepthStencilTextureResource()
 		IID_PPV_ARGS(&resource));		
 
 	return resource;
+}
+
+void DirectXCommon::DebugController()
+{
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&DirectXCommon::GetInstance()->m_pDebugController))))
+	{
+		DirectXCommon::GetInstance()->m_pDebugController->EnableDebugLayer();
+		DirectXCommon::GetInstance()->m_pDebugController->SetEnableGPUBasedValidation(TRUE);
+	}
+}
+
+void DirectXCommon::DebugInforQueue()
+{
+	ComPtr<ID3D12InfoQueue> infoQueue = nullptr;
+
+	if (SUCCEEDED(DirectXCommon::GetInstance()->m_pDevice_->QueryInterface(IID_PPV_ARGS(&infoQueue))))
+	{
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+		D3D12_MESSAGE_ID denyIds[] =
+		{
+			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+		};
+		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+		D3D12_INFO_QUEUE_FILTER filter{};
+		filter.DenyList.NumIDs = _countof(denyIds);
+		filter.DenyList.pIDList = denyIds;
+		filter.DenyList.NumSeverities = _countof(severities);
+		filter.DenyList.pSeverityList = severities;
+		infoQueue->PushStorageFilter(&filter);
+	}
 }
 
 void DirectXCommon::CreateFactory()
@@ -378,7 +374,7 @@ void DirectXCommon::CreateFixFPS()
 	DirectXCommon::GetInstance()->reference_ = steady_clock::now();
 }
 
-void DirectXCommon::UpdateFixFPS()
+void DirectXCommon::BeginFixFPS()
 {
 	//1/60‚Ò‚Á‚½‚ÌŽžŠÔ
 	const microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
@@ -400,6 +396,21 @@ void DirectXCommon::UpdateFixFPS()
 	}
 	//Œ»Ý‚ÌŽžŠÔ‚ð‹L˜^
 	DirectXCommon::GetInstance()->reference_ = steady_clock::now();
+
+}
+
+void DirectXCommon::BeginBarrier(SwapChain swapChain, UINT backBufferIndex)
+{
+	D3D12_RESOURCE_BARRIER barrier{};
+
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = swapChain.m_pResource[backBufferIndex].Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+
+	DirectXCommon::GetInstance()->commands.m_pList.Get()->ResourceBarrier(1, &barrier);
+	DirectXCommon::GetInstance()->barrier = barrier;
 
 }
 
