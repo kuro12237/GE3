@@ -19,7 +19,7 @@ void Audio::Initialize()
 	HRESULT hr{};
 	hr = XAudio2Create(&Audio::GetInstance()->xAudio, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
-	//master‚Ìƒ{ƒCƒX‚Ìì¬
+	//masterï¿½Ìƒ{ï¿½Cï¿½Xï¿½Ìì¬
 	hr = Audio::GetInstance()->xAudio->CreateMasteringVoice(&Audio::GetInstance()->masterVoice);
 	assert(SUCCEEDED(hr));
 
@@ -42,7 +42,7 @@ uint32_t Audio::SoundLoadWave(const char* filename)
 	file.open(filename, std::ios_base::binary);
 	assert(SUCCEEDED(file.is_open()));
 
-	//file‚ªRiff‚Éˆê’v‚·‚é‚©Type‚ªWave‚©
+	//fileï¿½ï¿½Riffï¿½Éˆï¿½vï¿½ï¿½ï¿½é‚©Typeï¿½ï¿½Waveï¿½ï¿½
 	RiffHeader riff = {};
 	file.read((char*)&riff, sizeof(riff));
 	if (strncmp(riff.chunk.id,"RIFF",4) != 0)
@@ -50,9 +50,9 @@ uint32_t Audio::SoundLoadWave(const char* filename)
 	if (strncmp(riff.Type, "WAVE", 4) != 0)
 	{assert(0);}
 
-	//Format‚Ìƒ`ƒƒƒ“ƒN“Ç‚İ‚İ
+	//Formatï¿½Ìƒ`ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½Ç‚İï¿½ï¿½ï¿½
 	FormatChunk format = {};
-	//ƒ`ƒƒƒ“ƒNƒwƒbƒ_[‚ÌŠm”F
+	//ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½wï¿½bï¿½_ï¿½[ï¿½ÌŠmï¿½F
 	file.read((char*)&format, sizeof(ChunkHeader));
 	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
 		assert(0);
@@ -61,7 +61,7 @@ uint32_t Audio::SoundLoadWave(const char* filename)
 	assert(format.chunk.size <= sizeof(format.fmt));
 	file.read((char*)&format.fmt, format.chunk.size);
 	
-	//Dataƒ`ƒƒƒ“ƒN‚Ì“Ç‚İ‚İ
+	//Dataï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½Ì“Ç‚İï¿½ï¿½ï¿½
 	ChunkHeader data = {};
 	file.read((char*)&data, sizeof(data));
 	if (strncmp(data.id,"JUNK",4) == 0){
@@ -74,7 +74,7 @@ uint32_t Audio::SoundLoadWave(const char* filename)
 	char* pBuffer = new char[data.size];
 	file.read(pBuffer, data.size);
 	file.close();
-	//‘ã“ü
+	//ï¿½ï¿½ï¿½
 	Audio::GetInstance()->soundData_[Audio::GetInstance()->soundDataCount_].wfex = format.fmt;
 	Audio::GetInstance()->soundData_[Audio::GetInstance()->soundDataCount_].pBuffer = reinterpret_cast<BYTE*>(pBuffer);
 	Audio::GetInstance()->soundData_[Audio::GetInstance()->soundDataCount_].bufferSize = data.size;
@@ -84,7 +84,7 @@ uint32_t Audio::SoundLoadWave(const char* filename)
 
 void Audio::SoundUnLoad(uint32_t soundHandle)
 {
-	//‚·‚×‚Ä‹ó“ñ‚·‚é
+	//ï¿½ï¿½ï¿½×‚Ä‹ï¿½ñ‚·‚ï¿½
 	delete[] Audio::GetInstance()->soundData_[soundHandle].pBuffer;
 	Audio::GetInstance()->soundData_[soundHandle].pBuffer = 0;
 	Audio::GetInstance()->soundData_[soundHandle].bufferSize = 0;

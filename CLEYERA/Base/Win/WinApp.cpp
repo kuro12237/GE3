@@ -35,7 +35,7 @@ void WinApp::Initialize()
 	);
 
 	ShowWindow(WinApp::GetInstance()->hwnd_, SW_SHOW);
-	//ƒVƒXƒeƒ€‚½‚¢‚È[‚Ì•ª‰ð”\—Í‚ðã‚°‚é
+	//ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È[ï¿½Ì•ï¿½ï¿½ï¿½\ï¿½Í‚ï¿½ã‚°ï¿½ï¿½
 	timeBeginPeriod(1);
 }
 
@@ -94,9 +94,9 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	}
 	switch (msg)
 	{
-		//ƒEƒCƒ“ƒhƒE‚ª”jŠü
+		//ï¿½Eï¿½Cï¿½ï¿½ï¿½hï¿½Eï¿½ï¿½ï¿½jï¿½ï¿½
 	case WM_DESTROY:
-		//OS‚É‘Î‚µƒAƒvƒŠI—¹‚ð“`‚¦‚é
+		//OSï¿½É‘Î‚ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½
 		PostQuitMessage(0);
 		return 0;
 	}
